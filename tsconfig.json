@@ -1,0 +1,12 @@
+{
+  // Nuxt 4 splits type checking into isolated projects (app / server / shared /
+  // node). This root config only references the generated projects; the actual
+  // compiler options live in .nuxt/* and are produced by `nuxt prepare`.
+  "files": [],
+  "references": [
+    { "path": "./.nuxt/tsconfig.app.json" },
+    { "path": "./.nuxt/tsconfig.server.json" },
+    { "path": "./.nuxt/tsconfig.shared.json" },
+    { "path": "./.nuxt/tsconfig.node.json" }
+  ]
+}

@@ -1,0 +1,26 @@
+# Local development infrastructure. The application itself runs on the host via
+# `pnpm dev`; the full multi-stage app image is added in a later stage.
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: tsnuxt-taskflow-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: taskflow
+      POSTGRES_PASSWORD: taskflow
+      POSTGRES_DB: taskflow
+    ports:
+      # Host 5436 -> container 5432. A local Postgres already occupies 5432 (and
+      # 5433/5434 are taken by other containers), so this port avoids the clash.
+      - '5436:5432'
+    volumes:
+      - taskflow-pgdata:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U taskflow -d taskflow']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  taskflow-pgdata:

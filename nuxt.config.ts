@@ -1,0 +1,54 @@
+import tailwindcss from '@tailwindcss/vite'
+
+// https://nuxt.com/docs/api/configuration/nuxt-config
+export default defineNuxtConfig({
+  // Pin the Nitro/Nuxt behaviour to a known date so future releases cannot
+  // silently change defaults underneath the project.
+  compatibilityDate: '2025-06-01',
+
+  // SSR is the whole point of this sample (server-rendered, session-based auth),
+  // so it stays on explicitly rather than relying on the default.
+  ssr: true,
+
+  devtools: { enabled: true },
+
+  modules: ['@nuxt/eslint', 'shadcn-nuxt'],
+
+  css: ['~/assets/css/main.css'],
+
+  // Tailwind v4 is wired through its Vite plugin rather than the legacy Nuxt
+  // module: the v4 engine is configured in CSS (@theme), not a JS config file.
+  vite: {
+    plugins: [tailwindcss()],
+  },
+
+  // shadcn-vue components are generated into the app source tree and owned by
+  // this repo (no runtime UI dependency to hide behind).
+  shadcn: {
+    prefix: '',
+    componentDir: './app/components/ui',
+  },
+
+  typescript: {
+    strict: true,
+    // Type checking runs as a dedicated `nuxt typecheck` step (and in CI) so the
+    // dev server stays fast instead of type-checking on every change.
+    typeCheck: false,
+  },
+
+  // Formatting is delegated to Prettier; ESLint only enforces correctness rules.
+  eslint: {
+    config: {
+      stylistic: false,
+    },
+  },
+
+  runtimeConfig: {
+    // Server-only secrets. Overridden at runtime by NUXT_* environment variables.
+    databaseUrl: '',
+    sessionPassword: '',
+    public: {
+      appName: 'TaskFlow',
+    },
+  },
+})
