@@ -12,7 +12,7 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  modules: ['@nuxt/eslint', 'shadcn-nuxt'],
+  modules: ['@nuxt/eslint', 'shadcn-nuxt', 'nuxt-auth-utils'],
 
   css: ['~/assets/css/main.css'],
 
@@ -44,9 +44,9 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    // Server-only secrets. Overridden at runtime by NUXT_* environment variables.
+    // Server-only. Overridden at runtime by NUXT_DATABASE_URL.
+    // The session secret is read by nuxt-auth-utils from NUXT_SESSION_PASSWORD.
     databaseUrl: '',
-    sessionPassword: '',
     public: {
       appName: 'TaskFlow',
     },
