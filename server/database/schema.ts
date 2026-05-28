@@ -1,7 +1,8 @@
 import { relations, sql } from 'drizzle-orm'
 import { index, pgEnum, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core'
+import { TASK_STATUSES } from '../../shared/constants/task-status'
 
-export const taskStatus = pgEnum('task_status', ['todo', 'in_progress', 'done'])
+export const taskStatus = pgEnum('task_status', TASK_STATUSES)
 
 // Column names come from the camelCase keys via `casing: 'snake_case'`, so there
 // are no hand-written snake_case names to keep in sync.
