@@ -1,4 +1,4 @@
-export interface PageMeta {
+export interface PaginationMeta {
   page: number
   limit: number
   total: number
@@ -7,5 +7,5 @@ export interface PageMeta {
 
 export interface Paginated<T> {
   data: T[]
-  pagination: PageMeta
+  pagination: PaginationMeta
 }

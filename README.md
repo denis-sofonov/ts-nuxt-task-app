@@ -42,10 +42,16 @@ ever sees and mutates their own data (others get `403`).
 pnpm install
 cp .env.example .env          # adjust secrets as needed
 docker compose up -d db       # PostgreSQL on host port 5436
+pnpm db:migrate               # apply schema migrations
+pnpm db:seed                  # optional: demo user + sample data
 pnpm dev                      # http://localhost:3000
 ```
 
-> Database schema, migrations and seeds are introduced in the next stage.
+Demo login after seeding: `demo@taskflow.dev` / `password123`.
+
+> **macOS note:** the `dev` script sets `TMPDIR=/tmp` so the Vite dev-server IPC
+> socket path stays under the 104-byte `sun_path` limit. The default
+> `/var/folders/…` temp path overflows it and breaks dev SSR with `EINVAL`.
 
 ## Quality gate
 

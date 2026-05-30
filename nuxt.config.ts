@@ -12,7 +12,7 @@ export default defineNuxtConfig({
 
   devtools: { enabled: true },
 
-  modules: ['@nuxt/eslint', 'shadcn-nuxt', 'nuxt-auth-utils'],
+  modules: ['@nuxt/eslint', 'shadcn-nuxt', 'nuxt-auth-utils', '@pinia/nuxt'],
 
   css: ['~/assets/css/main.css'],
 

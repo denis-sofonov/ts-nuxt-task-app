@@ -12,5 +12,13 @@ export default withNuxt(
       'vue/multi-word-component-names': 'off',
     },
   },
+  {
+    // Vendored shadcn-vue primitives: relax the optional `class` prop rule they
+    // ship with rather than editing generated files.
+    files: ['app/components/ui/**'],
+    rules: {
+      'vue/require-default-prop': 'off',
+    },
+  },
   eslintConfigPrettier,
 )
