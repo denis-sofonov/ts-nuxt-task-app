@@ -1,5 +1,7 @@
 # ts-nuxt-task-app
 
+[![CI](https://github.com/denis-sofonov/ts-nuxt-task-app/actions/workflows/ci.yml/badge.svg)](https://github.com/denis-sofonov/ts-nuxt-task-app/actions/workflows/ci.yml)
+
 A full-stack task manager built end to end on **Nuxt 4** and **Nitro**
 (TypeScript). It implements the same projects-and-tasks domain as its sibling
 backends — [`php-laravel-task-api`](https://github.com/denis-sofonov) and
@@ -56,11 +58,26 @@ Demo login after seeding: `demo@taskflow.dev` / `password123`.
 ## Quality gate
 
 ```bash
-pnpm qa            # lint + format check + typecheck
-pnpm lint          # ESLint
+pnpm qa            # lint + format check + typecheck + tests with coverage
+pnpm lint          # ESLint (warnings fail the build)
 pnpm format        # Prettier (write)
 pnpm typecheck     # vue-tsc via nuxt typecheck
 ```
+
+## Testing
+
+```bash
+pnpm test          # Vitest unit + component tests
+pnpm test:coverage # the above with a 70% coverage gate
+pnpm test:e2e      # Playwright flow (requires: pnpm build first)
+```
+
+The strategy is layered: Vitest unit tests cover the schemas and server
+utilities, a `@nuxt/test-utils` component test renders a representative
+component, and a Playwright run drives the full browser journey (register →
+project → task → status → sign out/in) against the production build and a
+dedicated test database. Coverage is measured on the project's own logic;
+generated UI primitives and integration-tested routes are excluded.
 
 ## Design decisions & trade-offs
 

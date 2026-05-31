@@ -62,7 +62,7 @@ const navLinks = [{ label: 'Projects', to: '/projects' }]
 
         <DropdownMenu>
           <DropdownMenuTrigger as-child>
-            <Button variant="ghost" size="icon" class="rounded-full">
+            <Button variant="ghost" size="icon" class="rounded-full" aria-label="Account menu">
               <span class="text-xs font-medium">{{ initials }}</span>
             </Button>
           </DropdownMenuTrigger>

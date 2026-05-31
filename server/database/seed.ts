@@ -5,7 +5,11 @@ import * as schema from './schema'
 
 // Standalone script (run via tsx), so it loads its own env and opens a
 // short-lived connection instead of reusing the Nitro runtime client.
-process.loadEnvFile?.()
+try {
+  process.loadEnvFile?.()
+} catch {
+  // no .env file; rely on the ambient environment
+}
 
 const DEMO_PASSWORD = 'password123'
 

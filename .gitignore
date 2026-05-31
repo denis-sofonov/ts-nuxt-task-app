@@ -3,6 +3,7 @@ node_modules
 
 # Nuxt / Nitro build artifacts
 .nuxt
+.nuxtrc
 .output
 .nitro
 .data
