@@ -96,6 +96,14 @@ This section grows as the project does. Decisions made so far:
 - **shadcn-vue with a custom theme.** Components are generated into the repo and
   owned here (built on Reka UI primitives for accessibility), then re-themed
   with a restrained custom palette instead of the default look.
+- **Versioned API under `/api/v1`.** A namespace from the start means a future
+  breaking change can ship as `/api/v2` without disturbing existing clients.
+- **Layered CSRF defence.** `SameSite=Lax` on the sealed session cookie plus an
+  Origin check on every mutating request. No token plumbing is needed because
+  the app is same-origin and the API is JSON-only.
+- **In-memory rate limiting.** A fixed-window limiter (stricter on auth routes)
+  on Nitro storage. Correct for a single instance; a multi-instance deployment
+  would point the same storage API at Redis. Kept simple on purpose.
 
 ## License
 

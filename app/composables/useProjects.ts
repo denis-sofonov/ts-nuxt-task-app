@@ -5,7 +5,7 @@ export function useProjects() {
   const page = ref(1)
   const limit = ref(12)
 
-  const { data, pending, error, refresh } = useFetch('/api/projects', {
+  const { data, pending, error, refresh } = useFetch('/api/v1/projects', {
     query: { page, limit },
   })
 
@@ -13,17 +13,17 @@ export function useProjects() {
   const pagination = computed(() => data.value?.pagination ?? null)
 
   async function createProject(input: CreateProjectInput) {
-    await $fetch('/api/projects', { method: 'POST', body: input })
+    await $fetch('/api/v1/projects', { method: 'POST', body: input })
     await refresh()
   }
 
   async function updateProject(id: string, input: UpdateProjectInput) {
-    await $fetch(`/api/projects/${id}`, { method: 'PATCH', body: input })
+    await $fetch(`/api/v1/projects/${id}`, { method: 'PATCH', body: input })
     await refresh()
   }
 
   async function removeProject(id: string) {
-    await $fetch(`/api/projects/${id}`, { method: 'DELETE' })
+    await $fetch(`/api/v1/projects/${id}`, { method: 'DELETE' })
     await refresh()
   }
 

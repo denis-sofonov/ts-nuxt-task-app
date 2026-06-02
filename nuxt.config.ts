@@ -47,6 +47,16 @@ export default defineNuxtConfig({
     // Server-only. Overridden at runtime by NUXT_DATABASE_URL.
     // The session secret is read by nuxt-auth-utils from NUXT_SESSION_PASSWORD.
     databaseUrl: '',
+    // nuxt-auth-utils session cookie. It is sealed + httpOnly by default and
+    // marked Secure automatically in production; we set SameSite=Lax explicitly
+    // as the first CSRF layer, plus a name and a 7-day lifetime.
+    session: {
+      name: 'taskflow_session',
+      maxAge: 60 * 60 * 24 * 7,
+      cookie: {
+        sameSite: 'lax',
+      },
+    },
     public: {
       appName: 'TaskFlow',
     },

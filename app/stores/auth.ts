@@ -12,17 +12,17 @@ export const useAuthStore = defineStore('auth', () => {
   const currentUser = computed(() => user.value)
 
   async function login(credentials: LoginInput) {
-    await $fetch('/api/auth/login', { method: 'POST', body: credentials })
+    await $fetch('/api/v1/auth/login', { method: 'POST', body: credentials })
     await refreshSession()
   }
 
   async function register(input: RegisterInput) {
-    await $fetch('/api/auth/register', { method: 'POST', body: input })
+    await $fetch('/api/v1/auth/register', { method: 'POST', body: input })
     await refreshSession()
   }
 
   async function logout() {
-    await $fetch('/api/auth/logout', { method: 'POST' })
+    await $fetch('/api/v1/auth/logout', { method: 'POST' })
     await clear()
     await navigateTo('/login')
   }
