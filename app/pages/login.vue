@@ -64,7 +64,15 @@ async function handleSubmit() {
         </div>
 
         <div class="space-y-1.5">
-          <Label for="password">Password</Label>
+          <div class="flex items-center justify-between">
+            <Label for="password">Password</Label>
+            <NuxtLink
+              to="/forgot-password"
+              class="text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              Forgot password?
+            </NuxtLink>
+          </div>
           <Input
             id="password"
             v-model="password"

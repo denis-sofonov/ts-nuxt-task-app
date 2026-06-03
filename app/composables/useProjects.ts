@@ -4,9 +4,15 @@ import type { CreateProjectInput, UpdateProjectInput } from '#shared/schemas/pro
 export function useProjects() {
   const page = ref(1)
   const limit = ref(12)
+  const search = ref('')
+
+  // A new search starts from the first page.
+  watch(search, () => {
+    page.value = 1
+  })
 
   const { data, pending, error, refresh } = useFetch('/api/v1/projects', {
-    query: { page, limit },
+    query: { page, limit, search },
   })
 
   const projects = computed(() => data.value?.data ?? [])
@@ -32,6 +38,7 @@ export function useProjects() {
     pagination,
     page,
     limit,
+    search,
     pending,
     error,
     refresh,

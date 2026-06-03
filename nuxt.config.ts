@@ -47,6 +47,12 @@ export default defineNuxtConfig({
     // Server-only. Overridden at runtime by NUXT_DATABASE_URL.
     // The session secret is read by nuxt-auth-utils from NUXT_SESSION_PASSWORD.
     databaseUrl: '',
+    // Base URL used to build links in transactional emails.
+    appUrl: 'http://localhost:3000',
+    mailFrom: 'TaskFlow <no-reply@taskflow.dev>',
+    // When smtpHost is empty (dev default) emails are logged instead of sent.
+    smtpHost: '',
+    smtpPort: '1025',
     // nuxt-auth-utils session cookie. It is sealed + httpOnly by default and
     // marked Secure automatically in production; we set SameSite=Lax explicitly
     // as the first CSRF layer, plus a name and a 7-day lifetime.

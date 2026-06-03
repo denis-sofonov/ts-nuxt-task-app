@@ -35,7 +35,8 @@ test('register, manage a project and tasks, then sign back in', async ({ page })
   await test.step('move the task to done', async () => {
     await page.getByRole('combobox').click()
     await page.getByRole('option', { name: 'Done' }).click()
-    await expect(page.getByText('Done')).toBeVisible()
+    // The task's status control (not the filter button) now reads "Done".
+    await expect(page.getByRole('combobox')).toContainText('Done')
   })
 
   await test.step('sign out and back in', async () => {

@@ -22,5 +22,14 @@ services:
       timeout: 5s
       retries: 10
 
+  # Catches outgoing mail in development. SMTP on 1025, web inbox on 8025.
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: tsnuxt-taskflow-mailhog
+    restart: unless-stopped
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+
 volumes:
   taskflow-pgdata:

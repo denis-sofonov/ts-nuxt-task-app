@@ -31,11 +31,12 @@ async function main() {
     const passwordHash = await hash(DEMO_PASSWORD)
 
     // Two users so ownership rules (and 403s) are demonstrable from seed data.
+    const emailVerifiedAt = new Date()
     const [demo, alice] = await db
       .insert(schema.users)
       .values([
-        { email: 'demo@taskflow.dev', name: 'Demo User', passwordHash },
-        { email: 'alice@taskflow.dev', name: 'Alice Martin', passwordHash },
+        { email: 'demo@taskflow.dev', name: 'Demo User', passwordHash, emailVerifiedAt },
+        { email: 'alice@taskflow.dev', name: 'Alice Martin', passwordHash, emailVerifiedAt },
       ])
       .returning()
 

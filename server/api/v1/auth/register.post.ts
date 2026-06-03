@@ -30,6 +30,12 @@ export default defineEventHandler(async (event) => {
     })
 
   const user = inserted[0]!
+
+  // Fire-and-forget: a mail outage must not fail registration.
+  await sendVerificationEmail(user).catch((error: unknown) => {
+    console.error('Failed to send verification email', error)
+  })
+
   await setUserSession(event, { user })
   setResponseStatus(event, 201)
   return { user }

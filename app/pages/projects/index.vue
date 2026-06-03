@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { FolderPlus, Plus } from '@lucide/vue'
+import { FolderPlus, Plus, Search } from '@lucide/vue'
 import { toast } from 'vue-sonner'
 import type { CreateProjectInput } from '#shared/schemas/project'
 import type { ProjectDto } from '#shared/types/domain'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 
 definePageMeta({ middleware: 'auth' })
@@ -13,6 +14,7 @@ const {
   projects,
   pagination,
   page,
+  search,
   pending,
   error,
   refresh,
@@ -20,6 +22,16 @@ const {
   updateProject,
   removeProject,
 } = useProjects()
+
+// Debounce keystrokes so the list refetches at most a few times per second.
+const searchInput = ref('')
+let searchTimer: ReturnType<typeof setTimeout> | undefined
+watch(searchInput, (value) => {
+  clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => {
+    search.value = value.trim()
+  }, 300)
+})
 
 const formOpen = ref(false)
 const editing = ref<ProjectDto | null>(null)
@@ -78,6 +90,11 @@ async function handleRemove() {
       </Button>
     </div>
 
+    <div class="relative max-w-xs">
+      <Search class="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+      <Input v-model="searchInput" placeholder="Search projects" class="pl-9" />
+    </div>
+
     <!-- Loading -->
     <div v-if="pending" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <Skeleton v-for="n in 6" :key="n" class="h-36 rounded-xl" />
@@ -90,6 +107,16 @@ async function handleRemove() {
     >
       <p class="text-sm text-destructive">Could not load projects.</p>
       <Button variant="outline" size="sm" class="mt-3" @click="() => refresh()">Try again</Button>
+    </div>
+
+    <!-- No search matches -->
+    <div
+      v-else-if="projects.length === 0 && search"
+      class="rounded-xl border border-dashed p-12 text-center"
+    >
+      <Search class="mx-auto size-8 text-muted-foreground" />
+      <h2 class="mt-3 font-medium">No matches</h2>
+      <p class="mt-1 text-sm text-muted-foreground">No projects match “{{ search }}”.</p>
     </div>
 
     <!-- Empty -->

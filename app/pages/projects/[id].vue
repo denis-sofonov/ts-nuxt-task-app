@@ -30,12 +30,18 @@ const {
 
 const {
   tasks,
+  status: statusFilter,
   pending: tasksPending,
   error: tasksError,
   createTask,
   updateTask,
   removeTask,
 } = useProjectTasks(projectId)
+
+const statusFilters = [
+  { value: '', label: 'All' },
+  ...TASK_STATUSES.map((value) => ({ value, label: TASK_STATUS_LABELS[value] })),
+] as const
 
 useHead(() => ({ title: project.value?.name ?? 'Project' }))
 
@@ -170,10 +176,23 @@ async function changeStatus(task: TaskDto, status: TaskStatus) {
       </div>
 
       <section class="space-y-3">
-        <div class="flex items-center justify-between">
-          <h2 class="text-sm font-medium text-muted-foreground">
-            Tasks <span v-if="!tasksPending">· {{ tasks.length }}</span>
-          </h2>
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-1 rounded-lg border p-0.5">
+            <button
+              v-for="filter in statusFilters"
+              :key="filter.value"
+              type="button"
+              class="rounded-md px-2.5 py-1 text-xs font-medium transition-colors"
+              :class="
+                statusFilter === filter.value
+                  ? 'bg-secondary text-secondary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              "
+              @click="statusFilter = filter.value"
+            >
+              {{ filter.label }}
+            </button>
+          </div>
           <Button size="sm" variant="outline" @click="openCreateTask">
             <Plus class="size-4" />
             Add task
@@ -190,7 +209,7 @@ async function changeStatus(task: TaskDto, status: TaskStatus) {
           v-else-if="tasks.length === 0"
           class="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground"
         >
-          No tasks yet. Add the first one.
+          {{ statusFilter ? 'No tasks with this status.' : 'No tasks yet. Add the first one.' }}
         </div>
 
         <ul v-else class="space-y-2">

@@ -3,6 +3,7 @@ import { index, pgEnum, pgTable, text, timestamp, uniqueIndex, uuid } from 'driz
 import { TASK_STATUSES } from '../../shared/constants/task-status'
 
 export const taskStatus = pgEnum('task_status', TASK_STATUSES)
+export const authTokenType = pgEnum('auth_token_type', ['email_verification', 'password_reset'])
 
 // Column names come from the camelCase keys via `casing: 'snake_case'`, so there
 // are no hand-written snake_case names to keep in sync.
@@ -14,6 +15,8 @@ export const users = pgTable(
     // Argon2id hash. Never selected into API responses (see the user serializer).
     passwordHash: text().notNull(),
     name: text().notNull(),
+    // Null until the user confirms ownership of the address.
+    emailVerifiedAt: timestamp({ withTimezone: true }),
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp({ withTimezone: true })
       .notNull()
@@ -67,8 +70,29 @@ export const tasks = pgTable(
   ],
 )
 
+// Single-use tokens for email verification and password reset. Only the SHA-256
+// hash of the token is stored, so a database leak cannot reveal a usable link.
+export const authTokens = pgTable(
+  'auth_tokens',
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    userId: uuid()
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    type: authTokenType().notNull(),
+    tokenHash: text().notNull(),
+    expiresAt: timestamp({ withTimezone: true }).notNull(),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('auth_tokens_token_hash_unique').on(table.tokenHash),
+    index('auth_tokens_user_id_idx').on(table.userId),
+  ],
+)
+
 export const usersRelations = relations(users, ({ many }) => ({
   projects: many(projects),
+  authTokens: many(authTokens),
 }))
 
 export const projectsRelations = relations(projects, ({ one, many }) => ({
@@ -78,6 +102,10 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
 
 export const tasksRelations = relations(tasks, ({ one }) => ({
   project: one(projects, { fields: [tasks.projectId], references: [projects.id] }),
+}))
+
+export const authTokensRelations = relations(authTokens, ({ one }) => ({
+  user: one(users, { fields: [authTokens.userId], references: [users.id] }),
 }))
 
 export type User = typeof users.$inferSelect
