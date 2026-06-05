@@ -12,6 +12,8 @@ const API_LIMIT = 100
 // deployment would mount a shared driver (e.g. Redis) under this same API.
 export default defineEventHandler(async (event) => {
   if (!event.path.startsWith('/api/')) return
+  // Health probes are polled frequently by orchestrators; never throttle them.
+  if (event.path.startsWith('/api/v1/health')) return
 
   const isAuth = event.path.startsWith('/api/v1/auth/')
   const limit = isAuth ? AUTH_LIMIT : API_LIMIT

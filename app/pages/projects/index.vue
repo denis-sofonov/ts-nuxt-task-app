@@ -23,6 +23,8 @@ const {
   removeProject,
 } = useProjects()
 
+const { data: stats } = await useFetch('/api/v1/stats')
+
 // Debounce keystrokes so the list refetches at most a few times per second.
 const searchInput = ref('')
 let searchTimer: ReturnType<typeof setTimeout> | undefined
@@ -82,7 +84,10 @@ async function handleRemove() {
     <div class="flex items-end justify-between gap-4">
       <div>
         <h1 class="text-2xl font-semibold tracking-tight">Projects</h1>
-        <p class="text-sm text-muted-foreground">Organise your work into projects.</p>
+        <p class="text-sm text-muted-foreground">
+          <template v-if="stats">{{ stats.projects }} projects · {{ stats.tasks }} tasks</template>
+          <template v-else>Organise your work into projects.</template>
+        </p>
       </div>
       <Button @click="openCreate">
         <Plus class="size-4" />

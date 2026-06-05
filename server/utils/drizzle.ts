@@ -5,7 +5,7 @@ import * as schema from '../database/schema'
 // Single namespace so routes read `tables.projects` rather than importing each.
 export const tables = schema
 
-export { and, asc, count, desc, eq, ilike, inArray, or, sql } from 'drizzle-orm'
+export { and, asc, count, desc, eq, ilike, inArray, lt, or, sql } from 'drizzle-orm'
 
 export type Database = PostgresJsDatabase<typeof schema>
 

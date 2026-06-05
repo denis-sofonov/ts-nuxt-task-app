@@ -29,6 +29,15 @@ export default defineNuxtConfig({
     componentDir: './app/components/ui',
   },
 
+  nitro: {
+    // Nitro background tasks: expired-token cleanup runs hourly (and on demand
+    // via `nuxi task run tokens:cleanup`).
+    experimental: { tasks: true },
+    scheduledTasks: {
+      '0 * * * *': ['tokens:cleanup'],
+    },
+  },
+
   typescript: {
     strict: true,
     // Type checking runs as a dedicated `nuxt typecheck` step (and in CI) so the
