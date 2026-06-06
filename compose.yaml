@@ -1,5 +1,9 @@
-# Local development infrastructure. The application itself runs on the host via
-# `pnpm dev`; the full multi-stage app image is added in a later stage.
+# Full stack: `docker compose up` builds the app, waits for Postgres, runs
+# migrations once, then starts the server on http://localhost:3000.
+#
+# For local development you can instead run only the infrastructure
+# (`docker compose up -d db mailhog`) and the app on the host with `pnpm dev`.
+
 services:
   db:
     image: postgres:17-alpine
@@ -30,6 +34,41 @@ services:
     ports:
       - '1025:1025'
       - '8025:8025'
+
+  # One-shot migration job: applies migrations then exits, so the app never runs
+  # them at boot (no race across instances). Built from the same source image.
+  migrate:
+    build:
+      context: .
+      target: builder
+    command: ['pnpm', 'db:migrate']
+    environment:
+      NUXT_DATABASE_URL: postgresql://taskflow:taskflow@db:5432/taskflow
+    depends_on:
+      db:
+        condition: service_healthy
+
+  app:
+    build:
+      context: .
+      target: runner
+    container_name: tsnuxt-taskflow-app
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      NUXT_DATABASE_URL: postgresql://taskflow:taskflow@db:5432/taskflow
+      NUXT_SESSION_PASSWORD: ${NUXT_SESSION_PASSWORD:-change-me-in-production-32-characters-min}
+      NUXT_PUBLIC_APP_NAME: TaskFlow
+      NUXT_APP_URL: http://localhost:3000
+      NUXT_MAIL_FROM: TaskFlow <no-reply@taskflow.dev>
+      NUXT_SMTP_HOST: mailhog
+      NUXT_SMTP_PORT: '1025'
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
 
 volumes:
   taskflow-pgdata:
