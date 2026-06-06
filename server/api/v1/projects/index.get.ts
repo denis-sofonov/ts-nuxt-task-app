@@ -6,6 +6,14 @@ const SORT_COLUMNS = {
   name: tables.projects.name,
 }
 
+defineRouteMeta({
+  openAPI: {
+    tags: ['Projects'],
+    summary: 'List projects',
+    description: 'Paginated, searchable, sortable.',
+  },
+})
+
 export default defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
   const { page, limit, search, sort, order } = await getValidatedQueryZod(

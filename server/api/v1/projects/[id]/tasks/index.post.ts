@@ -1,5 +1,9 @@
 import { createTaskSchema } from '#shared/schemas/task'
 
+defineRouteMeta({
+  openAPI: { tags: ['Tasks'], summary: 'Create a task in a project' },
+})
+
 export default defineEventHandler(async (event) => {
   const projectId = getUuidParam(event, 'id')
   await requireOwnedProject(event, projectId)

@@ -1,5 +1,9 @@
 import { registerSchema } from '#shared/schemas/auth'
 
+defineRouteMeta({
+  openAPI: { tags: ['Auth'], summary: 'Register', description: 'Create an account and session.' },
+})
+
 export default defineEventHandler(async (event) => {
   const { name, email, password } = await readValidatedBodyZod(event, registerSchema)
   const db = useDb()

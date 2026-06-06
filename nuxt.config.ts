@@ -32,9 +32,19 @@ export default defineNuxtConfig({
   nitro: {
     // Nitro background tasks: expired-token cleanup runs hourly (and on demand
     // via `nuxi task run tokens:cleanup`).
-    experimental: { tasks: true },
+    experimental: { tasks: true, openAPI: true },
     scheduledTasks: {
       '0 * * * *': ['tokens:cleanup'],
+    },
+    // Serve the generated OpenAPI document and Scalar UI in production too, not
+    // just in dev. Available at /_openapi.json and /_scalar.
+    openAPI: {
+      production: 'runtime',
+      meta: {
+        title: 'TaskFlow API',
+        description: 'REST API for the projects-and-tasks domain.',
+        version: '1.0.0',
+      },
     },
   },
 

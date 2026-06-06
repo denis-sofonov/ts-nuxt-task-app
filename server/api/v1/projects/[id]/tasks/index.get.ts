@@ -7,6 +7,14 @@ const SORT_COLUMNS = {
   status: tables.tasks.status,
 }
 
+defineRouteMeta({
+  openAPI: {
+    tags: ['Tasks'],
+    summary: 'List tasks in a project',
+    description: 'Filter by status; sortable.',
+  },
+})
+
 export default defineEventHandler(async (event) => {
   const projectId = getUuidParam(event, 'id')
   await requireOwnedProject(event, projectId)

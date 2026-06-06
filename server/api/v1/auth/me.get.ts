@@ -1,3 +1,7 @@
+defineRouteMeta({
+  openAPI: { tags: ['Auth'], summary: 'Current user', description: 'The authenticated account.' },
+})
+
 export default defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
   const db = useDb()

@@ -6,6 +6,10 @@ import { loginSchema } from '#shared/schemas/auth'
 const DUMMY_HASH =
   '$argon2id$v=19$m=19456,t=2,p=1$qk+K2ZQG/vwlpr5Y3kMxSw$Z5F11+B/wOTdop/yDgvLt8cYk0DQojQdBHnHyewyW3E'
 
+defineRouteMeta({
+  openAPI: { tags: ['Auth'], summary: 'Log in', description: 'Authenticate and start a session.' },
+})
+
 export default defineEventHandler(async (event) => {
   const { email, password } = await readValidatedBodyZod(event, loginSchema)
   const db = useDb()

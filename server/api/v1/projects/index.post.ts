@@ -1,5 +1,9 @@
 import { createProjectSchema } from '#shared/schemas/project'
 
+defineRouteMeta({
+  openAPI: { tags: ['Projects'], summary: 'Create a project' },
+})
+
 export default defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
   const { name, description } = await readValidatedBodyZod(event, createProjectSchema)
