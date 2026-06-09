@@ -145,6 +145,12 @@ test/ · e2e/    Vitest suites and the Playwright flow
 - **In-memory rate limiting.** A fixed-window limiter (stricter on auth routes)
   on Nitro storage. Correct for a single instance; a multi-instance deployment
   would point the same storage API at Redis. Kept simple on purpose.
+- **Known auth trade-offs (deliberate).** Sealed stateless session cookies can't
+  be revoked server-side, so logout and password reset don't invalidate other
+  live sessions until they expire — instant revocation would need a session
+  store or per-user token version. And registration returns `409` for a taken
+  email (clear UX) rather than hiding it; login and password reset are written
+  to avoid account enumeration, but registration intentionally is not.
 - **Migrations as a job, not at boot.** Compose runs migrations in a dedicated
   one-shot service the app waits on, so multiple app instances never race to
   migrate the same database.

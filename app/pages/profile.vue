@@ -11,6 +11,9 @@ const { data } = await useFetch('/api/v1/auth/me')
 const profile = computed(() => data.value?.user ?? null)
 const verified = computed(() => Boolean(profile.value?.emailVerifiedAt))
 
+// Cached server-side (see /api/v1/stats); a short staleness window is fine here.
+const { data: stats } = await useFetch('/api/v1/stats')
+
 const resending = ref(false)
 async function resendVerification() {
   resending.value = true
@@ -69,6 +72,22 @@ async function resendVerification() {
           >
             {{ resending ? 'Sending…' : 'Resend verification email' }}
           </Button>
+        </div>
+      </CardContent>
+    </Card>
+
+    <Card v-if="stats">
+      <CardHeader>
+        <CardTitle class="text-base">Workspace</CardTitle>
+      </CardHeader>
+      <CardContent class="grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-2xl font-semibold">{{ stats.projects }}</p>
+          <p class="text-xs text-muted-foreground">Projects</p>
+        </div>
+        <div>
+          <p class="text-2xl font-semibold">{{ stats.tasks }}</p>
+          <p class="text-xs text-muted-foreground">Tasks</p>
         </div>
       </CardContent>
     </Card>
