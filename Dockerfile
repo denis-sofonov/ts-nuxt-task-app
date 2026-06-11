@@ -8,6 +8,8 @@ WORKDIR /app
 # build the Nitro output. Reused as the one-shot migration image, since it has
 # the source, drizzle-kit and the migrations. ---
 FROM base AS builder
+# Skip the husky git-hooks install: there is no .git inside the build context.
+ENV HUSKY=0
 RUN apk add --no-cache python3 make g++
 # Full source is copied before install so the `nuxt prepare` postinstall has a
 # project to prepare; the pnpm store is cached across builds.

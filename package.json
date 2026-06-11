@@ -25,7 +25,23 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "tsx server/database/seed.ts"
+    "db:seed": "tsx server/database/seed.ts",
+    "commit": "cz",
+    "prepare": "husky"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-git"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,vue,js,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml,css}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@lucide/vue": "^1.17.0",
@@ -48,6 +64,8 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/test-utils": "^4.0.3",
     "@playwright/test": "^1.60.0",
@@ -56,11 +74,15 @@
     "@types/nodemailer": "^8.0.0",
     "@vitest/coverage-v8": "^4.1.8",
     "@vue/test-utils": "^2.4.11",
+    "commitizen": "^4.3.1",
     "cross-env": "^10.1.0",
+    "cz-git": "^1.13.1",
     "drizzle-kit": "^0.31.10",
     "eslint": "^10.4.1",
     "eslint-config-prettier": "^10.1.8",
     "happy-dom": "^20.10.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
     "prettier": "^3.8.3",
     "tailwindcss": "^4.3.0",
     "tsx": "^4.22.4",

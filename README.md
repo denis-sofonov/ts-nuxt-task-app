@@ -108,6 +108,14 @@ project → task → status → sign out/in) against the production build and a
 dedicated test database. Coverage is measured on the project's own logic;
 generated UI primitives and integration-tested routes are excluded.
 
+## Conventions
+
+Commits follow [Conventional Commits](https://www.conventionalcommits.org),
+enforced on commit by a Husky `commit-msg` hook running commitlint. A
+`pre-commit` hook runs lint-staged (ESLint + Prettier on staged files). Use
+`pnpm commit` for a guided commitizen prompt. Dependencies and the base image
+are kept current by Dependabot.
+
 ## Project structure
 
 ```
