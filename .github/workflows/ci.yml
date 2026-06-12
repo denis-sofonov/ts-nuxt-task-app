@@ -34,7 +34,7 @@ jobs:
       NUXT_SESSION_PASSWORD: ci-session-secret-at-least-32-characters-long
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: pnpm/action-setup@v4
 
