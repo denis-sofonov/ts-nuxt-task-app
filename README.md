@@ -42,6 +42,37 @@ enum (`todo` / `in_progress` / `done`). Access is ownership-based: a user only
 ever sees and mutates their own data; another user's resource returns `403`, a
 missing one `404`.
 
+## Architecture
+
+The app is one Nuxt project with a clear seam between the Nitro API and the Vue
+UI, and a `shared/` layer both sides import from.
+
+**Request lifecycle (server).** Every `/api/v1` route is a thin handler that
+composes the same building blocks: global middleware applies rate limiting and
+the Origin/CSRF check; `readValidatedBodyZod` / `getValidatedQueryZod` parse
+input against a shared Zod schema (a 422 with field errors on failure);
+`requireOwnedProject` / `requireOwnedTask` load the row and assert ownership in
+one place (404 vs 403); Drizzle runs the query; the handler returns a plain
+object. Authorization and validation can't be bypassed because the routes never
+touch the database directly — they go through these helpers.
+
+**Data flow (client).** Components never call the API. Reads go through
+composables (`useProjects`, `useProject`, `useProjectTasks`) that wrap
+`useFetch` for SSR-friendly fetching and expose `pending` / `error` plus
+mutation actions that re-`refresh()` after a write. Pages are containers: they
+own state and orchestrate dialogs and composables; presentational components
+(`ProjectCard`, `ProjectTaskList`, `StatusBadge`) take props and emit events.
+The `auth` Pinia store is a thin reactive view over the `nuxt-auth-utils`
+session, so the sealed cookie stays the single source of truth.
+
+**Type safety end to end.** Handler return types flow through Nitro into
+`useFetch`, so the UI is typed against the real API with no hand-written client.
+Client-facing `*Dto` types (ISO-string timestamps) are kept separate from the
+Drizzle row types (`Date`) so components depend on the transport contract, not
+the ORM. Zod schemas in `shared/` are the one source for both server validation
+and the in-dialog form checks. There are no `any`s or `@ts-ignore`s in the app
+code.
+
 ## Getting started
 
 ### Prerequisites
