@@ -41,5 +41,5 @@ export default defineEventHandler(async (event) => {
     db.select({ total: count() }).from(tables.tasks).where(where),
   ])
 
-  return { data, pagination: buildPageMeta(page, limit, totals?.total ?? 0) }
+  return { data: data.map(toTaskDto), pagination: buildPageMeta(page, limit, totals?.total ?? 0) }
 })

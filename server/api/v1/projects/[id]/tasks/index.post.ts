@@ -15,6 +15,10 @@ export default defineEventHandler(async (event) => {
     .values({ projectId, title, description, status })
     .returning()
 
+  if (!task) {
+    throw createError({ statusCode: 500, statusMessage: 'Failed to create task' })
+  }
+
   setResponseStatus(event, 201)
-  return { task }
+  return { task: toTaskDto(task) }
 })

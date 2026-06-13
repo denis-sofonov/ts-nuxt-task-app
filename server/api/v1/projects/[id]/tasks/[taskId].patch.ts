@@ -13,5 +13,11 @@ export default defineEventHandler(async (event) => {
     .where(eq(tables.tasks.id, taskId))
     .returning()
 
-  return { task }
+  // requireOwnedTask loaded the row, but a concurrent delete could remove it
+  // before this update lands.
+  if (!task) {
+    throw createError({ statusCode: 404, statusMessage: 'Task not found' })
+  }
+
+  return { task: toTaskDto(task) }
 })

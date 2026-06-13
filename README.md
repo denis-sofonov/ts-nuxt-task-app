@@ -67,11 +67,14 @@ session, so the sealed cookie stays the single source of truth.
 
 **Type safety end to end.** Handler return types flow through Nitro into
 `useFetch`, so the UI is typed against the real API with no hand-written client.
-Client-facing `*Dto` types (ISO-string timestamps) are kept separate from the
-Drizzle row types (`Date`) so components depend on the transport contract, not
-the ORM. Zod schemas in `shared/` are the one source for both server validation
-and the in-dialog form checks. There are no `any`s or `@ts-ignore`s in the app
-code.
+A small mapping layer (`server/utils/dto.ts`) is the single translation point
+between the persistence model and the transport contract: it turns Drizzle rows
+(`Date`, every column) into client-facing `*Dto` types (ISO-string timestamps,
+an explicit field whitelist). Mapping there rather than returning rows means a
+schema change that renames or drops a field fails to compile, and components
+depend on the contract, not the ORM. Zod schemas in `shared/` are the one source
+for both server validation and the in-dialog form checks. There are no `any`s or
+`@ts-ignore`s in the app code.
 
 ## Getting started
 

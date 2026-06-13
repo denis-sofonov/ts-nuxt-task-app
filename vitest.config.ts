@@ -16,6 +16,7 @@ export default defineVitestConfig({
         'shared/constants/**/*.ts',
         'app/composables/useApiError.ts',
         'app/components/StatusBadge.vue',
+        'server/utils/dto.ts',
         'server/utils/pagination.ts',
         'server/utils/password.ts',
         'server/utils/postgres.ts',

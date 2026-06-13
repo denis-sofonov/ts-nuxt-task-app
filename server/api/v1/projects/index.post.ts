@@ -14,6 +14,10 @@ export default defineEventHandler(async (event) => {
     .values({ userId: user.id, name, description })
     .returning()
 
+  if (!project) {
+    throw createError({ statusCode: 500, statusMessage: 'Failed to create project' })
+  }
+
   setResponseStatus(event, 201)
-  return { project }
+  return { project: toProjectDto(project) }
 })

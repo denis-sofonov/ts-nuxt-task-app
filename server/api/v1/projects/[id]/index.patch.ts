@@ -12,5 +12,11 @@ export default defineEventHandler(async (event) => {
     .where(eq(tables.projects.id, projectId))
     .returning()
 
-  return { project }
+  // requireOwnedProject loaded the row, but a concurrent delete could remove it
+  // before this update lands.
+  if (!project) {
+    throw createError({ statusCode: 404, statusMessage: 'Project not found' })
+  }
+
+  return { project: toProjectDto(project) }
 })
