@@ -4,10 +4,10 @@
 
 A full-stack task manager built end to end on **Nuxt 4** and **Nitro**
 (TypeScript). It implements the same projects-and-tasks domain as its sibling
-backends — [`php-laravel-task-api`](https://github.com/denis-sofonov/php-laravel-task-api) and
-[`python-fastapi-task-api`](https://github.com/denis-sofonov/python-fastapi-task-api) — and its
-React counterpart [`ts-next-task-app`](https://github.com/denis-sofonov/ts-next-task-app), so the
-same problem can be compared across stacks. This is the full-stack take: the server
+backends — [Laravel](https://github.com/denis-sofonov/php-laravel-task-api) and
+[FastAPI](https://github.com/denis-sofonov/python-fastapi-task-api) — and its React counterpart
+[Next.js](https://github.com/denis-sofonov/ts-next-task-app), so the same problem can be compared
+across stacks. This is the full-stack take: the server
 API **and** the UI live in one application, with end-to-end type safety from the
 database schema through to the Vue components.
 
