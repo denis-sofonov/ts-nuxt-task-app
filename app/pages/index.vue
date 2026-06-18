@@ -43,7 +43,7 @@ const stack = ['Nuxt 4', 'Nitro', 'TypeScript', 'Drizzle ORM', 'PostgreSQL', 'Ta
       </h1>
       <p class="mt-4 max-w-xl text-lg text-muted-foreground">
         A full-stack reference implementation of the same projects-and-tasks domain that powers the
-        sibling Laravel and FastAPI services — here built end to end on Nuxt and Nitro.
+        sibling FastAPI service — here built end to end on Nuxt and Nitro.
       </p>
 
       <div class="mt-8">
